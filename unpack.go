@@ -55,6 +55,7 @@ func unpack(arc *os.File) {
 		if magic_comp != 0x70697A6F {
 			binary.Write(meta, binary.LittleEndian, int8(0))
 			arc.Seek(int64(offset), 0)
+			size = int(next_offset - offset)
 			io.CopyN(file, arc, int64(next_offset-offset))
 		} else {
 			binary.Write(meta, binary.LittleEndian, int8(1))
