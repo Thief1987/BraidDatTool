@@ -81,4 +81,5 @@ func unpack(arc *os.File) {
 	f := time.Now()
 	fmt.Printf("%v files succesfully unpacked in %.2f sec", filecount, f.Sub(s).Abs().Seconds())
 	meta.Close()
+
 }
