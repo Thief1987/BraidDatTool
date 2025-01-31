@@ -1,4 +1,4 @@
-#BraidDatTool
+# BraidDatTool
 
 Usage: BraidDatTool [-u archive_name | -r archive_name [compression_level]]
 
