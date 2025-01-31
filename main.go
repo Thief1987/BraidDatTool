@@ -24,19 +24,20 @@ func ReadUint64(r io.Reader) uint64 {
 	return binary.LittleEndian.Uint64(buf.Bytes())
 }
 
+func die_with_usage_message() {
+	fmt.Printf("Usage: BraidDatTool [-u archive_name | -r archive_name [compression_level]]\n")
+	fmt.Printf("\t -u archive_name                            Unpack the archive. \n")
+	fmt.Printf("\t -r archive_name [compression_level]        Repack the archive. \n")
+	fmt.Printf("When repacking, optionally you can specify the compression level. Valid values are from -4 (fastest) to 9 (slowest).\n")
+	fmt.Printf("Default value is 6 (devs used it), but it's pretty slow, very slow I would say, so I decided to add this compression level option at least for testing purposes.\n")
+	log.Fatal()
+}
+
 func main() {
-
-	//os.Mkdir(f.Name()[:len(f.Name())-len(filepath.Ext(f.Name()))], 0700)
-	//os.Chdir(f.Name()[:len(f.Name())-len(filepath.Ext(f.Name()))])
-
-	//unpack(f)
 
 	args := os.Args
 	if len(args) == 1 {
-		fmt.Printf("Usage : \n      unpack: -u archive_name \n      repack: -r archive name compression_level\n")
-		fmt.Printf("When repacking, optionally you can specify compression level, legit values are from -4(fastest) to 9(slowest).\n")
-		fmt.Printf("Default value is 6(devs used it), but it's pretty slow, very slow I would say, so I decided to add this option at least for the testing purposes.")
-		log.Fatal()
+		die_with_usage_message()
 	}
 	
 	if args[1] == "-u" {
@@ -61,9 +62,6 @@ func main() {
 		}
 
 	} else {
-		fmt.Printf("Usage : \n      unpack: -u archive_name \n      repack: -r archive name compression_level\n")
-		fmt.Printf("When repacking optionally you can specify compression level, legit values are from -4(fastest) to 9(slowest).\n")
-		fmt.Printf("Default value is 6(devs used it), but it's pretty slow, very slow I would say, so I decided to add this option at least for testing purposes.")
-		log.Fatal()
+		die_with_usage_message()
 	}
 }
