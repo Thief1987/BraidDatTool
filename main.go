@@ -31,6 +31,7 @@ func die_with_usage_message() {
 	fmt.Printf("When repacking, optionally you can specify the compression level. Valid values are from -4 (fastest) to 9 (slowest).\n")
 	fmt.Printf("Default value is 6 (devs used it), but it's pretty slow, very slow I would say, so I decided to add this compression level option at least for testing purposes.\n")
 	fmt.Printf("The BraidDatTool executable must be located in the same directory as oo2core_9_win64.dll in order to function properly.\n")
+	fmt.Printf("Looking for the archive to run BraidDatTool on? Maybe its \"C:\Program Files (x86)\Steam\steamapps\common\Braid Anniversary Edition\data\data.dat\" or in a similar location.\n")
 	log.Fatal()
 }
 
