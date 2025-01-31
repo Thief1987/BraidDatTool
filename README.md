@@ -11,6 +11,4 @@ When repacking, optionally you can specify the compression level. Valid values a
 
 Default value is 6 (devs used it), but it's pretty slow, very slow I would say, so I decided to add this compression level option at least for testing purposes.
 
-The BraidDatTool executable must be located in the same directory as oo2core_9_win64.dll in order to function properly.
-
-Looking for the archive to run BraidDatTool on? Maybe its `C:\Program Files (x86)\Steam\steamapps\common\Braid Anniversary Edition\data\data.dat` or in a similar location.
+Looking for the archive to run BraidDatTool on? Maybe its `C:\Program Files (x86)\Steam\steamapps\common\Braid Anniversary Edition\data\data.dat`, or in a similar location.
