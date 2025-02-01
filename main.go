@@ -30,7 +30,7 @@ func die_with_usage_message() {
 	fmt.Printf("\t -r archive_name [compression_level]        Repack the archive. \n")
 	fmt.Printf("When repacking, optionally you can specify the compression level. Valid values are from -4 (fastest) to 9 (slowest).\n")
 	fmt.Printf("Default value is 6 (devs used it), but it's pretty slow, very slow I would say, so I decided to add this compression level option at least for testing purposes.\n")
-	fmt.Printf("Looking for the archive to run BraidDatTool on? Maybe its \"C:\Program Files (x86)\Steam\steamapps\common\Braid Anniversary Edition\data\data.dat\" or in a similar location.\n")
+	fmt.Printf("Looking for the archive to run BraidDatTool on? Maybe its \"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Braid Anniversary Edition\\data\\data.dat\" or in a similar location.\n")
 	log.Fatal()
 }
 
@@ -40,7 +40,7 @@ func main() {
 	if len(args) == 1 {
 		die_with_usage_message()
 	}
-	
+
 	if args[1] == "-u" {
 		f, _ := os.Open("braid.dat")
 		defer f.Close()
