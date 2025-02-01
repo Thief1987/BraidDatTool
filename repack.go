@@ -22,7 +22,7 @@ func repack(v int) {
 	if err != nil {
 		new_arc.Close()
 		os.Remove("braid.dat_new")
-		log.Fatal("metadata.bin doesn't exist, try to unpack original archive firstly")
+		log.Fatal("metadata.bin doesn't exist; try to unpack the original archive first")
 	}
 	new_arc.WriteString(dat_magic)
 	binary.Write(new_arc, binary.LittleEndian, uint64(0))
@@ -70,5 +70,5 @@ func repack(v int) {
 	binary.Write(new_arc, binary.LittleEndian, TOC_offset)
 	new_arc.Close()
 	f := time.Now()
-	fmt.Printf("%v files succesfully packed in %.2f sec", filecount, f.Sub(s).Abs().Seconds())
+	fmt.Printf("%v files successfully packed in %.2f sec", filecount, f.Sub(s).Abs().Seconds())
 }
