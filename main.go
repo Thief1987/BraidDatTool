@@ -1,28 +1,17 @@
 package main
 
 import (
-	"bytes"
-	"encoding/binary"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"strconv"
 )
 
-const dat_magic = "BRAID-BF"
-
-func ReadUint32(r io.Reader) uint32 {
-	var buf bytes.Buffer
-	io.CopyN(&buf, r, 4)
-	return binary.LittleEndian.Uint32(buf.Bytes())
-}
-
-func ReadUint64(r io.Reader) uint64 {
-	var buf bytes.Buffer
-	io.CopyN(&buf, r, 8)
-	return binary.LittleEndian.Uint64(buf.Bytes())
-}
+const (
+	dat_magic     = "BRAID-BF"
+	threadsUnpack = 16
+	threadsPack   = 50
+)
 
 func die_with_usage_message() {
 	fmt.Printf("Usage: BraidDatTool [-u archive_name | -r archive_name [compression_level]]\n")
@@ -44,7 +33,7 @@ func main() {
 	if args[1] == "-u" {
 		f, _ := os.Open("braid.dat")
 		defer f.Close()
-		unpack(f)
+		Unpack(f)
 	} else if args[1] == "-r" {
 		if len(args) > 3 {
 			value, _ := strconv.Atoi(args[3])
