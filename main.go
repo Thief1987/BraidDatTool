@@ -26,6 +26,7 @@ func die_with_usage_message() {
 func dllDump() {
 	dll, _ := os.Create("oo2core_9_win64.dll")
 	dll.Write(oo2core_9_win64_dll)
+	dll.Close()
 }
 
 func main() {
