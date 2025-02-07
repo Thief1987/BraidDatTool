@@ -23,7 +23,18 @@ func die_with_usage_message() {
 	log.Fatal()
 }
 
+func dllDump() {
+	dll, _ := os.Create("oo2core_9_win64.dll")
+	dll.Write(oo2core_9_win64_dll)
+}
+
 func main() {
+	_, err := os.Stat("oo2core_9_win64.dll")
+	if err != nil {
+		if os.IsNotExist(err) {
+			dllDump()
+		}
+	}
 
 	args := os.Args
 	if len(args) == 1 {

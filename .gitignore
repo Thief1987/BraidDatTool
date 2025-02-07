@@ -3,6 +3,7 @@
 *.exe~
 *.so
 *.dylib
+*.dll
 
 # Test binary, built with `go test -c`
 *.test
@@ -16,6 +17,7 @@ data/
 *.dat*
 *.rar*
 metadata.bin
+
 
 .idea
 # Go workspace file
