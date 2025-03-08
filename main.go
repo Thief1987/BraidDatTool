@@ -9,7 +9,7 @@ import (
 
 const (
 	dat_magic     = "BRAID-BF"
-	threadsUnpack = 16
+	threadsUnpack = 50
 	threadsPack   = 50
 )
 
