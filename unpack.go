@@ -2,18 +2,16 @@ package main
 
 import (
 	"encoding/binary"
-	"fmt"
 	"os"
 	"sync"
-	"time"
 )
 
-func Unpack(a *os.File) {
+func Unpack(a *os.File, threadsUnpack uint16) {
 	var (
 		wg, wg1 sync.WaitGroup
 	)
-	fmt.Println("Offset       Size                     Name   ")
-	s := time.Now()
+	//fmt.Println("Offset       Size                     Name   ")
+	//s := time.Now()
 	meta, _ := os.Create("metadata.bin")
 	arc := newArc(a)
 	arc.data.Seek(8, 0)
@@ -23,12 +21,12 @@ func Unpack(a *os.File) {
 	binary.Write(meta, binary.LittleEndian, arc.files)
 	arc.NewTOC(TOC_offset)
 	arc.WriteTOCEntries()
-	for i := 0; i < int(arc.files/threadsUnpack); i++ {
+	for i := 0; i < int(arc.files/uint32(threadsUnpack)); i++ {
 		wg.Add(1)
-		for j := 0; j < threadsUnpack; j++ {
+		for j := 0; j < int(threadsUnpack); j++ {
 			wg1.Add(1)
 			go func(meta *os.File) {
-				arc.unpackEntry((i*threadsUnpack + j), meta)
+				arc.unpackEntry((i*int(threadsUnpack) + j), meta)
 				wg1.Done()
 			}(meta)
 		}
@@ -36,11 +34,11 @@ func Unpack(a *os.File) {
 		wg.Done()
 	}
 	wg.Wait()
-	remain := int(arc.files % threadsUnpack)
+	remain := int(arc.files % uint32(threadsUnpack))
 	for i := 0; i < remain; i++ {
 		arc.unpackEntry(int(arc.files)-remain+i, meta)
 	}
-	f := time.Now()
-	fmt.Printf("%v files successfully unpacked in %.2f sec", filecount, f.Sub(s).Abs().Seconds())
+	//f := time.Now()
+	//fmt.Printf("%v files successfully unpacked in %.2f sec\n", filecount, f.Sub(s).Abs().Seconds())
 	meta.Close()
 }

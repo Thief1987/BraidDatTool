@@ -45,22 +45,22 @@ func main() {
 	if args[1] == "-u" {
 		f, _ := os.Open("braid.dat")
 		defer f.Close()
-		Unpack(f)
+		Unpack(f, threadsUnpack)
 	} else if args[1] == "-r" {
 		if len(args) > 3 {
 			value, _ := strconv.Atoi(args[3])
 			if value >= -4 && value <= 9 {
 				fmt.Printf("Compression level value is set to %v\n", value)
-				repack(value)
+				Repack(value, threadsPack)
 			} else {
 				fmt.Printf("Invalid compression level value. Value will be set to 6")
 				value = 6
-				repack(value)
+				Repack(value, threadsPack)
 			}
 		} else {
 			fmt.Printf("Compression level value is not specified. Value will be set to 6")
 			value := 6
-			repack(value)
+			Repack(value, threadsPack)
 		}
 
 	} else {
