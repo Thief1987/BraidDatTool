@@ -9,8 +9,8 @@ import (
 
 const (
 	dat_magic     = "BRAID-BF"
-	threadsUnpack = 50
-	threadsPack   = 50
+	threadsUnpack = 16
+	threadsPack   = 16
 )
 
 func die_with_usage_message() {

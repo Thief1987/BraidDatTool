@@ -89,7 +89,7 @@ func (a *Arc) WriteTOCBinary() {
 func (a *Arc) unpackEntry(i int, meta *os.File) {
 	var (
 		next_offset uint64
-		//size        int
+		size        int
 	)
 	a.mu.Lock()
 	filecount++
@@ -113,7 +113,7 @@ func (a *Arc) unpackEntry(i int, meta *os.File) {
 		binary.Write(meta, binary.LittleEndian, int8(0))
 		a.data.Seek(int64(offset), 0)
 		io.CopyN(file, a.data, int64(next_offset-offset))
-		//size = int(next_offset - offset)
+		size = int(next_offset - offset)
 		a.mu.Unlock()
 	} else {
 		binary.Write(meta, binary.LittleEndian, int8(1))
@@ -129,19 +129,19 @@ func (a *Arc) unpackEntry(i int, meta *os.File) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		//size = len(data)
+		size = len(data)
 		file.Write(data)
 	}
 	file.Close()
-	//fmt.Printf("0x%X       %v        %s\n", offset, size, name)
+	fmt.Printf("0x%X       %v        %s\n", offset, size, name)
 }
 
 func (a *Arc) repackEntry(meta *os.File, v int) {
 	var (
 		c_flag   = make([]byte, 1)
 		name_buf bytes.Buffer
-		//size     int
-		offset int64
+		size     int
+		offset   int64
 	)
 	a.mu.Lock()
 	filecount++
@@ -164,7 +164,7 @@ func (a *Arc) repackEntry(meta *os.File, v int) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		//size = len(c_data)
+		size = len(c_data)
 		a.mu.Lock()
 		offset, _ = a.data.Seek(0, 1)
 		a.WriteTOCEntry(name_len, name_buf.String(), uint64(offset))
@@ -173,13 +173,13 @@ func (a *Arc) repackEntry(meta *os.File, v int) {
 		a.data.Write(c_data)
 		a.mu.Unlock()
 	} else {
-		//size = int(file_size)
+		size = int(file_size)
 		offset, _ = a.data.Seek(0, 1)
 		a.WriteTOCEntry(name_len, name_buf.String(), uint64(offset))
 		io.Copy(a.data, file)
 		a.mu.Unlock()
 	}
-	//fmt.Printf("0x%X       %v        %s\n", offset, size, name_buf.String())
+	fmt.Printf("0x%X       %v        %s\n", offset, size, name_buf.String())
 }
 
 func ReadUint32(r io.Reader) uint32 {
