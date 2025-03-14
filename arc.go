@@ -183,13 +183,13 @@ func (a *Arc) repackEntry(meta *os.File, v int) {
 }
 
 func ReadUint32(r io.Reader) uint32 {
-	var buf bytes.Buffer
-	io.CopyN(&buf, r, 4)
-	return binary.LittleEndian.Uint32(buf.Bytes())
+	buf := make([]byte, 4)
+	r.Read(buf)
+	return binary.LittleEndian.Uint32(buf)
 }
 
 func ReadUint64(r io.Reader) uint64 {
-	var buf bytes.Buffer
-	io.CopyN(&buf, r, 8)
-	return binary.LittleEndian.Uint64(buf.Bytes())
+	buf := make([]byte, 8)
+	r.Read(buf)
+	return binary.LittleEndian.Uint64(buf)
 }
