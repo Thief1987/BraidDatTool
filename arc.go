@@ -134,7 +134,7 @@ func (a *Arc) unpackEntry(i int, meta *os.File) {
 	}
 	file.Close()
 	//fmt.Printf("0x%X       %v        %s\n", offset, size, name)
-	fmt.Printf("\r%v/%v files unpacked", filecount, a.files)
+	fmt.Printf("\r%v/%v(%.1f%%) files unpacked", filecount, a.files, (float32(filecount) / float32(a.files) * 100))
 }
 
 func (a *Arc) repackEntry(meta *os.File, v int) {
@@ -183,8 +183,7 @@ func (a *Arc) repackEntry(meta *os.File, v int) {
 		file.WriteTo(a.data)
 		a.mu.Unlock()
 	}
-	//fmt.Printf("0x%X       %v        %s\n", offset, size, name_buf.String())
-	fmt.Printf("\r%v/%v files packed", filecount, a.files)
+	fmt.Printf("\r%v/%v(%.1f%%) files packed", filecount, a.files, (float32(filecount) / float32(a.files) * 100))
 }
 
 func ReadUint32(r io.Reader) uint32 {
