@@ -89,7 +89,7 @@ func (a *Arc) WriteTOCBinary() {
 func (a *Arc) unpackEntry(i int, meta *os.File) {
 	var (
 		next_offset uint64
-		size        int
+		//size        int
 	)
 	a.mu.Lock()
 	filecount++
@@ -113,7 +113,7 @@ func (a *Arc) unpackEntry(i int, meta *os.File) {
 		binary.Write(meta, binary.LittleEndian, int8(0))
 		a.data.Seek(int64(offset), 0)
 		io.CopyN(file, a.data, int64(next_offset-offset))
-		size = int(next_offset - offset)
+		//size = int(next_offset - offset)
 		a.mu.Unlock()
 	} else {
 		binary.Write(meta, binary.LittleEndian, int8(1))
@@ -129,19 +129,20 @@ func (a *Arc) unpackEntry(i int, meta *os.File) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		size = len(data)
+		//size = len(data)
 		file.Write(data)
 	}
 	file.Close()
-	fmt.Printf("0x%X       %v        %s\n", offset, size, name)
+	//fmt.Printf("0x%X       %v        %s\n", offset, size, name)
+	fmt.Printf("\r%v/%v files unpacked", filecount, a.files)
 }
 
 func (a *Arc) repackEntry(meta *os.File, v int) {
 	var (
 		c_flag   = make([]byte, 1)
 		name_buf bytes.Buffer
-		size     int
-		offset   int64
+		//size     int
+		offset int64
 	)
 	a.mu.Lock()
 	filecount++
@@ -152,34 +153,38 @@ func (a *Arc) repackEntry(meta *os.File, v int) {
 	info, _ := file.Stat()
 	file_size := info.Size()
 	if c_flag[0] == 1 {
-		var f_buf, temp bytes.Buffer
+		var temp bytes.Buffer
 		temp.WriteString("ozip")
 		binary.Write(&temp, binary.LittleEndian, ReadUint32(meta))
 		binary.Write(&temp, binary.LittleEndian, file_size)
 		temp.WriteString("ozip")
 		binary.Write(&temp, binary.LittleEndian, file_size)
 		a.mu.Unlock()
-		io.Copy(&f_buf, file)
-		c_data, err := oodle.Compress(f_buf.Bytes(), oodle.CompressorKraken, v)
+		f_buf := make([]byte, file_size)
+		file.Read(f_buf)
+		c_data, err := oodle.Compress(f_buf, oodle.CompressorKraken, v)
 		if err != nil {
 			fmt.Println(err)
 		}
-		size = len(c_data)
+		//size = len(c_data)
 		a.mu.Lock()
 		offset, _ = a.data.Seek(0, 1)
 		a.WriteTOCEntry(name_len, name_buf.String(), uint64(offset))
 		binary.Write(&temp, binary.LittleEndian, uint32(len(c_data)))
 		a.data.Write(temp.Bytes())
 		a.data.Write(c_data)
+		f_buf = nil
+		c_data = nil
 		a.mu.Unlock()
 	} else {
-		size = int(file_size)
+		//size = int(file_size)
 		offset, _ = a.data.Seek(0, 1)
 		a.WriteTOCEntry(name_len, name_buf.String(), uint64(offset))
-		io.Copy(a.data, file)
+		file.WriteTo(a.data)
 		a.mu.Unlock()
 	}
-	fmt.Printf("0x%X       %v        %s\n", offset, size, name_buf.String())
+	//fmt.Printf("0x%X       %v        %s\n", offset, size, name_buf.String())
+	fmt.Printf("\r%v/%v files packed", filecount, a.files)
 }
 
 func ReadUint32(r io.Reader) uint32 {

@@ -50,15 +50,15 @@ func main() {
 		if len(args) > 3 {
 			value, _ := strconv.Atoi(args[3])
 			if value >= -4 && value <= 9 {
-				fmt.Printf("Compression level value is set to %v\n", value)
+				fmt.Printf("Compression level value is set to %v\n\n", value)
 				Repack(value, threadsPack)
 			} else {
-				fmt.Printf("Invalid compression level value. Value will be set to 6")
+				fmt.Printf("Invalid compression level value. Value will be set to 6\n\n")
 				value = 6
 				Repack(value, threadsPack)
 			}
 		} else {
-			fmt.Printf("Compression level value is not specified. Value will be set to 6")
+			fmt.Printf("Compression level value is not specified. Value will be set to 6\n\n")
 			value := 6
 			Repack(value, threadsPack)
 		}

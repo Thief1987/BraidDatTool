@@ -12,7 +12,7 @@ func Unpack(a *os.File, threadsUnpack uint16) {
 	var (
 		wg sync.WaitGroup
 	)
-	fmt.Println("Offset       Size                     Name   ")
+	//fmt.Println("Offset       Size                     Name   ")
 	s := time.Now()
 	meta, _ := os.Create("metadata.bin")
 	arc := newArc(a)
@@ -41,6 +41,6 @@ func Unpack(a *os.File, threadsUnpack uint16) {
 		wg.Wait()
 	}
 	f := time.Now()
-	fmt.Printf("%v files successfully unpacked in %.2f sec\n", filecount, f.Sub(s).Abs().Seconds())
+	fmt.Printf("\r%v files successfully unpacked in %.2f sec", filecount, f.Sub(s).Abs().Seconds())
 	meta.Close()
 }

@@ -13,7 +13,7 @@ func Repack(v int, threadsPack uint16) {
 	var (
 		wg sync.WaitGroup
 	)
-	fmt.Println("Offset       Size                     Name   ")
+	//fmt.Println("Offset       Size                     Name   ")
 	s := time.Now()
 	new_arc, _ := os.Create("braid.dat_new")
 	meta, err := os.Open("metadata.bin")
@@ -51,5 +51,5 @@ func Repack(v int, threadsPack uint16) {
 	binary.Write(arc.data, binary.LittleEndian, arc.toc.offset)
 	arc.data.Close()
 	f := time.Now()
-	fmt.Printf("%v files successfully packed in %.2f sec", filecount, f.Sub(s).Abs().Seconds())
+	fmt.Printf("\r%v files successfully packed in %.2f sec", filecount, f.Sub(s).Abs().Seconds())
 }
