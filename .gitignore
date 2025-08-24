@@ -17,6 +17,7 @@ data/
 *.dat*
 *.rar*
 metadata.bin
+*.prof
 
 
 .idea

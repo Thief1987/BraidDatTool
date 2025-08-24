@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 	"strconv"
 )
 
 const (
-	dat_magic     = "BRAID-BF"
-	threadsUnpack = 16
-	threadsPack   = 16
+	dat_magic = "BRAID-BF"
+	count     = 50
 )
 
 func die_with_usage_message() {
@@ -41,29 +41,32 @@ func main() {
 	if len(args) == 1 {
 		die_with_usage_message()
 	}
+	threads := runtime.NumCPU()
 
-	if args[1] == "-u" {
-		f, _ := os.Open("braid.dat")
+	switch args[1] {
+	case "-u":
+		f, _ := os.Open(args[2])
 		defer f.Close()
-		Unpack(f, threadsUnpack)
-	} else if args[1] == "-r" {
+		Unpack(f, threads, true)
+	case "-r":
+		value, _ := strconv.Atoi(args[3])
+		arcName := args[2] + "_new"
 		if len(args) > 3 {
-			value, _ := strconv.Atoi(args[3])
 			if value >= -4 && value <= 9 {
 				fmt.Printf("Compression level value is set to %v\n\n", value)
-				Repack(value, threadsPack)
+				Repack(value, threads, arcName, true)
 			} else {
 				fmt.Printf("Invalid compression level value. Value will be set to 6\n\n")
 				value = 6
-				Repack(value, threadsPack)
+				Repack(value, threads, arcName, true)
 			}
 		} else {
 			fmt.Printf("Compression level value is not specified. Value will be set to 6\n\n")
 			value := 6
-			Repack(value, threadsPack)
+			Repack(value, threads, arcName, true)
 		}
 
-	} else {
+	default:
 		die_with_usage_message()
 	}
 }
