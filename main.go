@@ -6,6 +6,9 @@ import (
 	"os"
 	"runtime"
 	"strconv"
+	"strings"
+
+	_ "embed"
 )
 
 const (
@@ -13,13 +16,11 @@ const (
 	count     = 50
 )
 
+//go:embed README.md
+var readme string
+
 func die_with_usage_message() {
-	fmt.Printf("Usage: BraidDatTool [-u archive_name | -r archive_name [compression_level]]\n")
-	fmt.Printf("\t -u archive_name                            Unpack the archive. \n")
-	fmt.Printf("\t -r archive_name [compression_level]        Repack the archive. \n")
-	fmt.Printf("When repacking, optionally you can specify the compression level. Valid values are from -4 (fastest) to 9 (slowest).\n")
-	fmt.Printf("Default value is 6 (devs used it), but it's pretty slow, very slow I would say, so I decided to add this compression level option at least for testing purposes.\n")
-	fmt.Printf("Looking for the archive to run BraidDatTool on? Maybe it's \"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Braid Anniversary Edition\\data\\data.dat\" or in a similar location.\n")
+	fmt.Printf(strings.Join(strings.Split(readme, "\n")[2:], "\n"))
 	log.Fatal()
 }
 
@@ -56,12 +57,12 @@ func main() {
 				fmt.Printf("Compression level value is set to %v\n\n", value)
 				Repack(value, threads, arcName, true)
 			} else {
-				fmt.Printf("Invalid compression level value. Value will be set to 6\n\n")
+				fmt.Printf("Invalid compression level value. Value will be set to 6.\n\n")
 				value = 6
 				Repack(value, threads, arcName, true)
 			}
 		} else {
-			fmt.Printf("Compression level value is not specified. Value will be set to 6\n\n")
+			fmt.Printf("Compression level value is not specified. Value will be set to 6.\n\n")
 			value := 6
 			Repack(value, threads, arcName, true)
 		}
